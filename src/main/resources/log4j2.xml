@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration >
+	<properties>
+		<Property name="layout">%d{yy/MM/dd HH:mm:ss.SSS} [%c.%M()] %level{lowerCase=true} - %m%n</Property>
+		<Property name="rootDir">/usr/local/app/</Property> 
+		<Property name="rootDir_gz">/usr/local/app/</Property>
+		<!-- 日志文件路径 以及压缩文件路径 -->
+<!-- 		<Property name="rootDir">d:/localhost/app/</Property> -->
+<!-- 		<Property name="rootDir_gz">d:/localhost/app/</Property> -->
+	</properties>
+	<Appenders> 
+			<RollingFile name="LOG" fileName="${rootDir}logs/app_access.log"
+			filePattern="${rootDir_gz}logs/$${date:yyyy-MM}/app_access-%d{MM -dd-yyyy}-%i.log.gz">
+			<Filters>
+				<ThresholdFilter level="ERROR" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout>
+				<Pattern>${layout}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="RollingFileError" fileName="${rootDir}logs/error.log"
+			filePattern="${rootDir_gz}logs/$${date:yyyy-MM}/error-%d{MM -dd-yyyy}-%i.log.gz">
+			<Filters>
+				<ThresholdFilter level="ERROR" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout>
+				<Pattern>${layout}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="RollingFileDebug" fileName="${rootDir}/logs/debug.log"
+			filePattern="${rootDir_gz}logs/$${date:yyyy-MM}/debug-%d{MM-dd-yyyy}-%i.log.gz">
+			<Filters>
+				<ThresholdFilter level="INFO" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="ERROR" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="DEBUG" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout>
+				<Pattern>${layout}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="RollingFileInfo" fileName="${rootDir}logs/info.log"
+			filePattern="${rootDir_gz}logs/$${date:yyyy-MM}/info-%d{MM-dd-yyyy}-%i.log.gz">
+			<Filters>
+				<ThresholdFilter level="ERROR" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="INFO" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout>
+				<Pattern>${layout}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${layout}" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<root level="trace">
+			<AppenderRef ref="RollingFileError" />
+			<AppenderRef ref="RollingFileDebug" />
+			<AppenderRef ref="RollingFileInfo" />
+			<appender-ref ref="Console" />
+			<appender-ref ref="LOG" />
+		</root>
+	</Loggers>
+</Configuration>
